@@ -1,4 +1,4 @@
-package com.example.bakingapp;
+package com.example.bakingapp.Data;
 
 import com.example.bakingapp.Models.BakingModel;
 
@@ -9,6 +9,6 @@ import retrofit2.http.GET;
 
 public interface GetData {
 
-    @GET
+    @GET("baking.json")
     Call<List<BakingModel>> getAllData();
 }
