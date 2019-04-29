@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.bakingapp.Models.BakingModel;
 import com.example.bakingapp.R;
 import com.example.bakingapp.UI.ListDetailActivity;
+import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
@@ -19,11 +20,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHolder> {
-    private List<BakingModel> data;
+    private List<BakingModel> mainData;
     private Context context;
 
-    public MainListAdapter(List<BakingModel> data, Context context) {
-        this.data = data;
+    public MainListAdapter(List<BakingModel> mainData, Context context) {
+        this.mainData = mainData;
         this.context = context;
     }
 
@@ -40,7 +41,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHo
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ListDetailActivity.class);
-                    intent.putExtra(Intent.EXTRA_TEXT, data.get(getAdapterPosition()));
+                    intent.putExtra(Intent.EXTRA_TEXT, new GsonBuilder().create().toJson(mainData.get(getAdapterPosition()), BakingModel.class));
                     context.startActivity(intent);
                 }
             });
@@ -56,12 +57,12 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.mTitle.setText(data.get(i).getName());
-        viewHolder.mServings.setText(data.get(i).getServings().toString());
+        viewHolder.mTitle.setText(mainData.get(i).getName());
+        viewHolder.mServings.setText(mainData.get(i).getServings().toString());
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return mainData.size();
     }
 }
