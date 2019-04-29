@@ -12,6 +12,7 @@ import com.example.bakingapp.Data.GetData;
 import com.example.bakingapp.Data.RetrofitInstance;
 import com.example.bakingapp.Models.BakingModel;
 import com.example.bakingapp.R;
+import com.google.gson.JsonArray;
 
 import java.util.List;
 
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
                 mRecyclerView.setLayoutManager(layoutManager);
                 mRecyclerView.setAdapter(mAdapter);
+
             }
 
             @Override
