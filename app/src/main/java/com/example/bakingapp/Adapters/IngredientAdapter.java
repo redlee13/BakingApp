@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.bakingapp.Models.Step;
+import com.example.bakingapp.Models.Ingredient;
 import com.example.bakingapp.R;
 
 import java.util.List;
@@ -16,18 +16,22 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> {
-    private List<Step> mStepList;
+public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.ViewHolder> {
+    private List<Ingredient> mIngredientList;
     private Context mContext;
 
-    public StepsAdapter(List<Step> stepList, Context context) {
-        mStepList = stepList;
+    public IngredientAdapter(List<Ingredient> ingredientList, Context context) {
+        mIngredientList = ingredientList;
         mContext = context;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        @BindView(R.id.step_item)
-        TextView mStep;
+        @BindView(R.id.ingredient_tv)
+        TextView mIngredient;
+        @BindView(R.id.quantity_tv)
+        TextView mQuantity;
+        @BindView(R.id.measure_tv)
+        TextView mMeasure;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -38,17 +42,20 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.step_item, viewGroup, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.ingredient_item, viewGroup, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.mStep.setText(mStepList.get(i).getShortDescription());
+        viewHolder.mIngredient.setText(mIngredientList.get(i).getIngredient());
+        viewHolder.mQuantity.setText(String.valueOf(mIngredientList.get(i).getQuantity()));
+        viewHolder.mMeasure.setText(mIngredientList.get(i).getMeasure());
+
     }
 
     @Override
     public int getItemCount() {
-        return mStepList.size();
+        return mIngredientList.size();
     }
 }

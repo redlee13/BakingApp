@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
+import com.example.bakingapp.Adapters.IngredientAdapter;
 import com.example.bakingapp.Adapters.StepsAdapter;
 import com.example.bakingapp.Models.BakingModel;
 import com.example.bakingapp.R;
@@ -18,11 +19,14 @@ import butterknife.ButterKnife;
 public class ListDetailActivity extends AppCompatActivity {
     private BakingModel data;
     private StepsAdapter mStepsAdapter;
+    private IngredientAdapter mIngredientAdapter;
 
-    @BindView(R.id.test)
-    TextView test;
+    @BindView(R.id.name)
+    TextView name;
     @BindView(R.id.steps_recycler_view)
     RecyclerView stepsRecyclerView;
+    @BindView(R.id.ingredient_recycler_view)
+    RecyclerView ingredientRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +36,13 @@ public class ListDetailActivity extends AppCompatActivity {
 
         String allData = getIntent().getStringExtra(Intent.EXTRA_TEXT);
         data = new Gson().fromJson(allData, BakingModel.class);
-        test.setText(data.getName());
+
+        name.setText(data.getName());
+
+        mIngredientAdapter = new IngredientAdapter(data.getIngredients(), this);
+        LinearLayoutManager ingredientLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        ingredientRecyclerView.setLayoutManager(ingredientLayoutManager);
+        ingredientRecyclerView.setAdapter(mIngredientAdapter);
 
         mStepsAdapter = new StepsAdapter(data.getSteps(), this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
