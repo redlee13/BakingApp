@@ -2,6 +2,7 @@ package com.example.bakingapp.UI;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -40,8 +41,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<BakingModel>> call, Response<List<BakingModel>> response) {
                 mAdapter = new MainListAdapter(response.body(), MainActivity.this);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-                mRecyclerView.setLayoutManager(layoutManager);
+                if (getResources().getBoolean(R.bool.isTablet)){
+                    GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this,2);
+                    mRecyclerView.setLayoutManager(layoutManager);
+                } else {
+                    GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this,1);
+                    mRecyclerView.setLayoutManager(layoutManager);
+                }
                 mRecyclerView.setAdapter(mAdapter);
             }
 

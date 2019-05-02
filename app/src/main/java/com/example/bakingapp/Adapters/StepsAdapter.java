@@ -1,6 +1,7 @@
 package com.example.bakingapp.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import com.example.bakingapp.Models.Step;
 import com.example.bakingapp.R;
+import com.example.bakingapp.UI.VideoActivity;
+import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
@@ -32,6 +35,15 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent stepIntent = new Intent(mContext, VideoActivity.class);
+                    stepIntent.putExtra(Intent.EXTRA_TEXT, new GsonBuilder().create().toJson(mStepList.get(getAdapterPosition()), Step.class));
+                    mContext.startActivity(stepIntent);
+                }
+            });
         }
     }
 
