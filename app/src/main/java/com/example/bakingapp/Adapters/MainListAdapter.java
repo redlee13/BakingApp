@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHolder> {
     private List<BakingModel> mainData;
     private Context context;
+    public static final String MAIN_LIST  = "main";
 
     public MainListAdapter(List<BakingModel> mainData, Context context) {
         this.mainData = mainData;
@@ -41,7 +42,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHo
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ListDetailActivity.class);
-                    intent.putExtra(Intent.EXTRA_TEXT, new GsonBuilder().create().toJson(mainData.get(getAdapterPosition()), BakingModel.class));
+                    intent.putExtra(MAIN_LIST, new GsonBuilder().create().toJson(mainData.get(getAdapterPosition()), BakingModel.class));
                     context.startActivity(intent);
                 }
             });

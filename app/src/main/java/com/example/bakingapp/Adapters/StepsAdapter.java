@@ -1,7 +1,7 @@
 package com.example.bakingapp.Adapters;
 
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.example.bakingapp.Models.Step;
 import com.example.bakingapp.R;
-import com.example.bakingapp.UI.VideoActivity;
-import com.google.gson.GsonBuilder;
+import com.example.bakingapp.UI.ListDetailActivity;
+import com.example.bakingapp.UI.VideoFragment;
 
 import java.util.List;
 
@@ -22,13 +22,14 @@ import butterknife.ButterKnife;
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> {
     private List<Step> mStepList;
     private Context mContext;
+    public static final String DETAILS = "detail";
 
     public StepsAdapter(List<Step> stepList, Context context) {
         mStepList = stepList;
         mContext = context;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.step_item)
         TextView mStep;
 
@@ -39,12 +40,29 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent stepIntent = new Intent(mContext, VideoActivity.class);
-                    stepIntent.putExtra(Intent.EXTRA_TEXT, new GsonBuilder().create().toJson(mStepList.get(getAdapterPosition()), Step.class));
-                    mContext.startActivity(stepIntent);
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("video_url", mStepList.get(getAdapterPosition()).getVideoURL());
+                    bundle.putString("description",  mStepList.get(getAdapterPosition()).getDescription());
+
+                    VideoFragment videoFragment = new VideoFragment();
+                    videoFragment.setArguments(bundle);
+
+                    if (mContext.getResources().getBoolean(R.bool.isTablet)){
+                        ((ListDetailActivity) mContext).getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.video_container,videoFragment)
+                                .commit();
+                    } else {
+                        ((ListDetailActivity) mContext).getSupportFragmentManager().beginTransaction()
+                                .addToBackStack(null)
+                                .replace(R.id.list_container,videoFragment)
+                                .commit();
+                    }
+
                 }
             });
         }
+
     }
 
     @NonNull
