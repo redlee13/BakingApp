@@ -2,14 +2,17 @@ package com.example.bakingapp.UI;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.bakingapp.Models.Step;
 import com.example.bakingapp.R;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -25,7 +28,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class VideoFragment extends Fragment {
-    private Step mStep;
     @BindView(R.id.description)
     TextView description;
     @BindView(R.id.videoView)
@@ -34,6 +36,9 @@ public class VideoFragment extends Fragment {
 
     private String videoUrl;
     private String videoDescription;
+
+    private int mResumeWindow;
+    private long mResumePosition;
 
     private OnFragmentInteractionListener mListener;
 
@@ -48,6 +53,11 @@ public class VideoFragment extends Fragment {
         if (getArguments() != null) {
             videoUrl = getArguments().getString("video_url");
             videoDescription = getArguments().getString("description");
+
+            if (savedInstanceState != null){
+                mResumePosition = savedInstanceState.getLong("position");
+                player.seekTo(mResumePosition);
+            }
         }
     }
 
@@ -143,4 +153,31 @@ public class VideoFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        boolean haveResumePosition = mResumeWindow != C.INDEX_UNSET;
+        if (haveResumePosition && mPlayerView != null) {
+            mPlayerView.getPlayer().seekTo(mResumeWindow, mResumePosition);
+        }
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mPlayerView != null && mPlayerView.getPlayer() != null){
+            mResumeWindow = mPlayerView.getPlayer().getCurrentWindowIndex();
+            mResumePosition = Math.max(0, mPlayerView.getPlayer().getContentPosition());
+            mPlayerView.getPlayer().release();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putLong("position", mResumePosition);
+        super.onSaveInstanceState(outState);
+    }
+
 }

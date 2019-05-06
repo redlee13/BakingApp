@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.bakingapp.Models.Step;
@@ -22,7 +23,6 @@ import butterknife.ButterKnife;
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> {
     private List<Step> mStepList;
     private Context mContext;
-    public static final String DETAILS = "detail";
 
     public StepsAdapter(List<Step> stepList, Context context) {
         mStepList = stepList;
@@ -40,29 +40,31 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    Bundle bundle = new Bundle();
-                    bundle.putString("video_url", mStepList.get(getAdapterPosition()).getVideoURL());
-                    bundle.putString("description",  mStepList.get(getAdapterPosition()).getDescription());
-
-                    VideoFragment videoFragment = new VideoFragment();
-                    videoFragment.setArguments(bundle);
-
-                    if (mContext.getResources().getBoolean(R.bool.isTablet)){
-                        ((ListDetailActivity) mContext).getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.video_container,videoFragment)
-                                .commit();
-                    } else {
-                        ((ListDetailActivity) mContext).getSupportFragmentManager().beginTransaction()
-                                .addToBackStack(null)
-                                .replace(R.id.list_container,videoFragment)
-                                .commit();
-                    }
-
+                    createFragment(getAdapterPosition());
                 }
             });
         }
 
+    }
+
+    private void createFragment(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putString("video_url", mStepList.get(position).getVideoURL());
+        bundle.putString("description", mStepList.get(position).getDescription());
+
+        VideoFragment videoFragment = new VideoFragment();
+        videoFragment.setArguments(bundle);
+
+        if (mContext.getResources().getBoolean(R.bool.isTablet)) {
+            ((ListDetailActivity) mContext).getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.video_container, videoFragment)
+                    .commit();
+        } else {
+            ((ListDetailActivity) mContext).getSupportFragmentManager().beginTransaction()
+                    .addToBackStack(null)
+                    .replace(R.id.list_container, videoFragment)
+                    .commit();
+        }
     }
 
     @NonNull
