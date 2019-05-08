@@ -3,12 +3,14 @@ package com.example.bakingapp.UI;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bakingapp.Models.Step;
 import com.example.bakingapp.R;
@@ -24,6 +26,8 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -32,10 +36,19 @@ public class VideoFragment extends Fragment {
     TextView description;
     @BindView(R.id.videoView)
     PlayerView mPlayerView;
+    @BindView(R.id.buttonsLayout)
+    ConstraintLayout buttonLayout;
+    @BindView(R.id.next)
+    ImageView nextButton;
+    @BindView(R.id.prev)
+    ImageView prevButton;
+
     private SimpleExoPlayer player;
 
+    private int position;
     private String videoUrl;
     private String videoDescription;
+    private ArrayList<Step> mStepArrayList;
 
     private int mResumeWindow;
     private long mResumePosition;
@@ -51,14 +64,18 @@ public class VideoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            videoUrl = getArguments().getString("video_url");
-            videoDescription = getArguments().getString("description");
+            mStepArrayList = getArguments().getParcelableArrayList("all");
+            position = getArguments().getInt("position");
+
+            videoUrl = mStepArrayList.get(position).getVideoURL();
+            videoDescription = mStepArrayList.get(position).getDescription();
 
             if (savedInstanceState != null){
                 mResumePosition = savedInstanceState.getLong("position");
                 player.seekTo(mResumePosition);
             }
         }
+
     }
 
     @Override
@@ -75,14 +92,45 @@ public class VideoFragment extends Fragment {
             mPlayerView.setVisibility(View.GONE);
         } else {
             mPlayerView.setVisibility(View.VISIBLE);
-            initiatePlayer();
+            initiatePlayer(videoUrl);
         }
 
+        if (getResources().getBoolean(R.bool.isTablet)){
+            buttonLayout.setVisibility(View.GONE);
+        }
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (position < mStepArrayList.size()-1){
+                    releasePlayer();
+                    position++;
+                    description.setText(mStepArrayList.get(position).getDescription());
+                    initiatePlayer(mStepArrayList.get(position).getVideoURL());
+                } else {
+                    Toast.makeText(getContext(), getString(R.string.end_of_steps), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        prevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (position > 0){
+                    releasePlayer();
+                    position--;
+                    description.setText(mStepArrayList.get(position).getDescription());
+                    initiatePlayer(mStepArrayList.get(position).getVideoURL());
+                } else {
+                    Toast.makeText(getContext(), getString(R.string.start_of_steps), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         return view;
     }
 
-    private void initiatePlayer(){
+    private void initiatePlayer(String videoUrl){
         player = ExoPlayerFactory.newSimpleInstance(
                 new DefaultRenderersFactory(getContext()),
                 new DefaultTrackSelector(),

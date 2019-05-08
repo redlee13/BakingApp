@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.bakingapp.Models.Step;
@@ -15,6 +14,7 @@ import com.example.bakingapp.R;
 import com.example.bakingapp.UI.ListDetailActivity;
 import com.example.bakingapp.UI.VideoFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -49,8 +49,8 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.ViewHolder> 
 
     private void createFragment(int position) {
         Bundle bundle = new Bundle();
-        bundle.putString("video_url", mStepList.get(position).getVideoURL());
-        bundle.putString("description", mStepList.get(position).getDescription());
+        bundle.putInt("position", position);
+        bundle.putParcelableArrayList("all", new ArrayList<>(mStepList));
 
         VideoFragment videoFragment = new VideoFragment();
         videoFragment.setArguments(bundle);

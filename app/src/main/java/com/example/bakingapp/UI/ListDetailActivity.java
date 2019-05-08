@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.bakingapp.Adapters.MainListAdapter;
 import com.example.bakingapp.R;
 
+import butterknife.ButterKnife;
+
 public class ListDetailActivity extends AppCompatActivity {
     public static final String DATA = "json_data";
 
@@ -14,7 +16,7 @@ public class ListDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_detail);
-
+        ButterKnife.bind(this);
 
         String allData = getIntent().getStringExtra(MainListAdapter.MAIN_LIST);
 
@@ -28,7 +30,6 @@ public class ListDetailActivity extends AppCompatActivity {
         fragmentManager.beginTransaction()
                 .add(R.id.list_container, listFragment)
                 .commit();
-
 
     }
 }
