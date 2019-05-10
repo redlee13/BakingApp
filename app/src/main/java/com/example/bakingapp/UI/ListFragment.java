@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.bakingapp.Adapters.IngredientAdapter;
 import com.example.bakingapp.Adapters.StepsAdapter;
@@ -24,8 +23,6 @@ public class ListFragment extends Fragment {
     private StepsAdapter mStepsAdapter;
     private IngredientAdapter mIngredientAdapter;
 
-    @BindView(R.id.name)
-    TextView name;
     @BindView(R.id.steps_recycler_view)
     RecyclerView stepsRecyclerView;
     @BindView(R.id.ingredient_recycler_view)
@@ -57,7 +54,6 @@ public class ListFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         data = new Gson().fromJson(allData, BakingModel.class);
-        name.setText(data.getName());
 
         mIngredientAdapter = new IngredientAdapter(data.getIngredients(), getContext());
         LinearLayoutManager ingredientLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -68,7 +64,6 @@ public class ListFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         stepsRecyclerView.setLayoutManager(layoutManager);
         stepsRecyclerView.setAdapter(mStepsAdapter);
-
 
         return view;
     }

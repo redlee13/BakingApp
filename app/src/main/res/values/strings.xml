@@ -9,4 +9,7 @@
     <string name="end_of_steps">No more steps</string>
     <string name="start_of_steps">This is the first step</string>
     <string name="no_video">Video Not Available</string>
+    <string name="add_widget">Add to widget</string>
+
+    <string name="add_data">Select Recipe from app</string>
 </resources>

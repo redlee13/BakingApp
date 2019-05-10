@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
 public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHolder> {
     private List<BakingModel> mainData;
     private Context context;
-    public static final String MAIN_LIST  = "main";
+    public static final String MAIN_LIST = "main";
 
     public MainListAdapter(List<BakingModel> mainData, Context context) {
         this.mainData = mainData;
@@ -37,7 +37,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHo
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -66,4 +66,6 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.ViewHo
     public int getItemCount() {
         return mainData.size();
     }
+
+
 }

@@ -59,3 +59,5 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
         return mIngredientList.size();
     }
 }
+
+
