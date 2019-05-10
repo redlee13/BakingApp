@@ -56,8 +56,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="@string/servings"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:layout_editor_absoluteY="48dp"/>
+                app:layout_constraintBaseline_toBaselineOf="@+id/servings_text_view"
+                app:layout_constraintEnd_toEndOf="parent"/>
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 
