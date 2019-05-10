@@ -12,4 +12,5 @@
     <string name="add_widget">Add to widget</string>
 
     <string name="add_data">Select Recipe from app</string>
+    <string name="servings">Servings</string>
 </resources>
