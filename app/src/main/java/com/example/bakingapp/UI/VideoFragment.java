@@ -92,7 +92,6 @@ public class VideoFragment extends Fragment {
             mPlayerView.setVisibility(View.GONE);
         } else {
             mPlayerView.setVisibility(View.VISIBLE);
-            initiatePlayer(videoUrl);
         }
 
         if (getResources().getBoolean(R.bool.isTablet)){
@@ -210,6 +209,9 @@ public class VideoFragment extends Fragment {
             mPlayerView.getPlayer().seekTo(mResumeWindow, mResumePosition);
         }
 
+        if ((Util.SDK_INT <= 23 || player == null)) {
+            initiatePlayer(videoUrl);
+        }
     }
 
     @Override
@@ -218,9 +220,29 @@ public class VideoFragment extends Fragment {
         if (mPlayerView != null && mPlayerView.getPlayer() != null){
             mResumeWindow = mPlayerView.getPlayer().getCurrentWindowIndex();
             mResumePosition = Math.max(0, mPlayerView.getPlayer().getContentPosition());
-            mPlayerView.getPlayer().release();
+            if (Util.SDK_INT <= 23) {
+                releasePlayer();
+            }
         }
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            initiatePlayer(videoUrl);
+        }
+    }
+
+
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
