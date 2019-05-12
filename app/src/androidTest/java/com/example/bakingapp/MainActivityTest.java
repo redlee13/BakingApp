@@ -13,6 +13,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static android.support.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
@@ -26,9 +27,22 @@ public class MainActivityTest {
 
     @Test
     public void mainActivityTest() {
-        onView(withId(R.id.main_recycler_view)).check(matches(isDisplayed()));
-        onView(withId(R.id.main_recycler_view)).perform(actionOnItemAtPosition(1, click()));
-        onView(withId(R.id.ingredient_tv)).check(matches(isDisplayed()));
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        onView(withId(R.id.main_recycler_view)).perform(scrollToPosition(0)).check(matches(isDisplayed()));
+        onView(withId(R.id.main_recycler_view)).perform(actionOnItemAtPosition(2, click()));
+        onView(withId(R.id.ingredient_recycler_view)).perform(scrollToPosition(2)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.add_to_widget)).perform(click()).check(matches(isDisplayed()));
+
+        onView(withId(R.id.steps_recycler_view)).perform(actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.videoView)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.next)).perform(click()).check(matches(isDisplayed()));
     }
 
 }
